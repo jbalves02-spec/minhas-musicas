@@ -209,7 +209,7 @@ function separarNome(nome) {
 async function carregarLocais() {
   try {
     const todas = await DB.todas();
-    local.faixas = todas.map(({ id, nome, tamanho }) => ({ id, nome, tamanho, ...separarNome(nome) }))
+    local.faixas = todas.filter((m) => aceita(m.nome, m.tipo)).map(({ id, nome, tamanho }) => ({ id, nome, tamanho, ...separarNome(nome) }))
       .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
   } catch { local.faixas = []; }
   desenharLocais();
@@ -293,9 +293,22 @@ $('#lista-local').addEventListener('click', async (e) => {
   if (li) tocarLocal(+li.dataset.i);
 });
 
+// No celular: só MP3, e nunca áudios do WhatsApp (PTT-/AUD-AAAAMMDD-WA0001…)
+const ehCelular = /Android|iPhone|iPad/i.test(navigator.userAgent);
+const ehWhatsApp = (nome) => /^(PTT|AUD)-\d{8}-WA\d+/i.test(nome);
+const aceita = (nome, tipo = '') => ehCelular
+  ? /\.mp3$/i.test(nome) && !ehWhatsApp(nome)
+  : tipo.startsWith('audio/') || /\.(mp3|m4a|aac|ogg|oga|opus|wav|flac|wma)$/i.test(nome);
+
 async function adicionarArquivos(lista) {
-  const arquivos = [...lista].filter((f) => f.type.startsWith('audio/') || /\.(mp3|m4a|aac|ogg|oga|opus|wav|flac|wma)$/i.test(f.name));
-  if (!arquivos.length) { alert('Nenhum arquivo de música encontrado.'); return; }
+  const todos = [...lista];
+  const arquivos = todos.filter((f) => aceita(f.name, f.type));
+  const recusados = todos.length - arquivos.length;
+  if (!arquivos.length) {
+    alert(ehCelular ? 'Nenhuma música MP3 encontrada. No celular o app só guarda arquivos .mp3 (áudios do WhatsApp ficam de fora).' : 'Nenhum arquivo de música encontrado.');
+    return;
+  }
+  if (recusados && ehCelular) alert(`${recusados} arquivo(s) ignorado(s): no celular só entram músicas .mp3, sem áudios do WhatsApp.`);
   const existentes = new Set(local.faixas.map((m) => m.nome + '|' + m.tamanho));
   let novas = 0;
   $('#espaco').textContent = `Guardando ${arquivos.length} música(s)…`;
@@ -316,7 +329,11 @@ async function adicionarArquivos(lista) {
 $('#arquivos').addEventListener('change', (e) => { adicionarArquivos(e.target.files); e.target.value = ''; });
 $('#pasta').addEventListener('change', (e) => { adicionarArquivos(e.target.files); e.target.value = ''; });
 // Pasta inteira só funciona no computador
-if (/Android|iPhone|iPad/i.test(navigator.userAgent)) $('#rotulo-pasta').hidden = true;
+if (ehCelular) {
+  $('#rotulo-pasta').hidden = true;
+  $('#arquivos').setAttribute('accept', '.mp3,audio/mpeg');
+  $('#rotulo-arquivos').firstChild.textContent = '+ Adicionar músicas MP3 ';
+}
 
 async function mostrarEspaco() {
   let txt = `${local.faixas.length} música(s) guardada(s).`;

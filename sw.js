@@ -1,5 +1,5 @@
 // Guarda a "casca" do app para abrir sem internet. As músicas ficam no IndexedDB.
-const VERSAO = 'minhas-musicas-v1';
+const VERSAO = 'minhas-musicas-v2';
 const ARQUIVOS = ['./', 'index.html', 'estilo.css', 'app.js', 'manifest.json', 'icone-192.png', 'icone-512.png'];
 
 self.addEventListener('install', (e) => {
