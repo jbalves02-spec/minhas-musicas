@@ -84,3 +84,12 @@ audio { width: 100%; margin: 6px 0; }
 .lista .s { color: var(--suave); font-size: .85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lista .x { background: none; border: 0; color: var(--suave); width: 40px; height: 40px; font-size: 1.1rem; }
 .vazio { color: var(--suave); text-align: center; padding: 24px 8px; }
+
+.opcao { display: flex; align-items: center; gap: 8px; color: var(--suave); font-size: .9rem; margin: -4px 0 12px; min-height: 36px; }
+.opcao input { width: 20px; height: 20px; accent-color: var(--destaque); }
+/* Modo áudio: player reduzido ao mínimo permitido pelo YouTube (200x200) */
+.modo-audio .player-yt { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.modo-audio .player-yt[hidden] { display: none; }
+.modo-audio #player-yt, .modo-audio .player-yt iframe { width: 200px; height: 200px; aspect-ratio: auto; flex: none; }
+.modo-audio .player-yt .controles { flex: 1; min-width: 200px; flex-wrap: wrap; margin: 0; }
+.modo-audio .player-yt .tocando { width: 100%; white-space: normal; }

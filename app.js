@@ -131,12 +131,23 @@ $('#form-busca').addEventListener('submit', async (e) => {
   ul.innerHTML = '<li class="vazio">Buscando…</li>';
   $('#ver-resultados').click();
   try {
-    const url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=25'
-      + '&q=' + encodeURIComponent(q) + '&key=' + encodeURIComponent(chave());
+    const soAudio = $('#so-audio').checked;
+    const url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&videoCategoryId=10&maxResults=25'
+      + '&q=' + encodeURIComponent(soAudio ? q + ' áudio' : q) + '&key=' + encodeURIComponent(chave());
     const r = await fetch(url);
     const d = await r.json();
     if (!r.ok) throw new Error(d?.error?.message || 'Erro na busca');
-    yt.resultados = d.items.map((it) => ({
+    const pontos = (it) => {
+      // Canais "Artista - Topic" e títulos com "áudio"/"audio" costumam ser só a capa do disco, sem clipe
+      const t = (it.snippet.title + ' ' + it.snippet.channelTitle).toLowerCase();
+      let n = 0;
+      if (/ - topic$/i.test(it.snippet.channelTitle)) n += 3;
+      if (/(á|a)udio|lyric|letra/.test(t)) n += 2;
+      if (/clipe|clip|videoclipe|official video|v(í|i)deo oficial/.test(t)) n -= 2;
+      return n;
+    };
+    const itens = soAudio ? d.items.map((it, i) => ({ it, i, n: pontos(it) })).sort((a, b) => b.n - a.n || a.i - b.i).map((x) => x.it) : d.items;
+    yt.resultados = itens.map((it) => ({
       id: it.id.videoId,
       titulo: decod(it.snippet.title),
       canal: decod(it.snippet.channelTitle),
@@ -375,6 +386,11 @@ window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); pedi
 $('#botao-instalar').addEventListener('click', async () => { if (!pedidoInstalar) return; pedidoInstalar.prompt(); await pedidoInstalar.userChoice; pedidoInstalar = null; $('#botao-instalar').hidden = true; });
 
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+
+/* ---------- Preferência "só áudio" ---------- */
+$('#so-audio').checked = guardar.ler('soAudio', true);
+$('#so-audio').addEventListener('change', (e) => { guardar.gravar('soAudio', e.target.checked); document.body.classList.toggle('modo-audio', e.target.checked); });
+document.body.classList.toggle('modo-audio', $('#so-audio').checked);
 
 /* ---------- Início ---------- */
 mostrarChave();
