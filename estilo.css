@@ -1,0 +1,86 @@
+:root {
+  --fundo: #14110f;
+  --cartao: #221d1a;
+  --linha: #3a322d;
+  --texto: #f3ede8;
+  --suave: #b5aaa1;
+  --destaque: #e8a33d;
+  --perigo: #d9534f;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+.topo {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px 6px;
+}
+.topo h1 { font-size: 1.3rem; margin: 0; }
+.status { font-size: .85rem; padding: 4px 10px; border-radius: 99px; background: var(--cartao); color: var(--suave); }
+.status.on { color: #8fd18f; }
+.status.off { color: var(--destaque); }
+
+.abas { display: flex; gap: 6px; padding: 8px 16px; position: sticky; top: 0; background: var(--fundo); z-index: 5; }
+.abas button {
+  flex: 1; min-height: 44px; border: 1px solid var(--linha); background: var(--cartao);
+  border-radius: 10px; padding: 8px;
+}
+.abas button:last-child { flex: 0 0 52px; }
+.abas button[aria-selected="true"] { background: var(--destaque); color: #1b130a; border-color: var(--destaque); font-weight: 600; }
+
+main { max-width: 760px; margin: 0 auto; padding: 8px 16px 40px; }
+h2 { font-size: 1.05rem; margin: 22px 0 6px; }
+.dica { color: var(--suave); font-size: .9rem; margin: 4px 0 10px; }
+.aviso { background: #3a2a12; border: 1px solid #6b4a1c; padding: 10px 12px; border-radius: 10px; margin-bottom: 10px; }
+
+.busca { display: flex; gap: 8px; margin-bottom: 12px; }
+.busca input, .filtro {
+  flex: 1; min-height: 46px; padding: 0 12px; border-radius: 10px;
+  border: 1px solid var(--linha); background: var(--cartao); width: 100%;
+}
+.filtro { margin-bottom: 12px; }
+.busca button, .botao, #botao-instalar {
+  min-height: 46px; padding: 0 16px; border-radius: 10px; border: 0;
+  background: var(--destaque); color: #1b130a; font-weight: 600;
+  display: inline-flex; align-items: center;
+}
+.botao.secundario { background: var(--cartao); color: var(--texto); border: 1px solid var(--linha); }
+.perigo { min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--perigo); background: transparent; color: var(--perigo); }
+.acoes-local { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.player-yt, .player-local { background: var(--cartao); border: 1px solid var(--linha); border-radius: 14px; padding: 10px; margin-bottom: 12px; }
+#player-yt, .player-yt iframe { width: 100%; aspect-ratio: 16/9; height: auto; border: 0; border-radius: 10px; display: block; }
+audio { width: 100%; margin: 6px 0; }
+.controles { display: flex; justify-content: center; gap: 10px; margin-top: 8px; }
+.controles button {
+  width: 52px; height: 48px; border-radius: 12px; border: 1px solid var(--linha);
+  background: var(--fundo); font-size: 1.2rem;
+}
+.controles button[aria-pressed="true"] { border-color: var(--destaque); color: var(--destaque); }
+.tocando { margin: 6px 4px 0; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.sub-abas { display: flex; gap: 8px; margin: 4px 0 10px; }
+.sub-abas button { background: none; border: 0; border-bottom: 2px solid transparent; padding: 6px 2px; color: var(--suave); }
+.sub-abas button.ativo { color: var(--texto); border-color: var(--destaque); }
+
+.lista { list-style: none; margin: 0; padding: 0; }
+.lista li {
+  display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 10px;
+  border-bottom: 1px solid var(--linha); cursor: pointer;
+}
+.lista li:hover { background: var(--cartao); }
+.lista li.atual { background: #2f2418; }
+.lista img { width: 72px; height: 54px; object-fit: cover; border-radius: 6px; flex: none; }
+.lista .nota { width: 42px; height: 42px; border-radius: 8px; background: var(--cartao); display: grid; place-items: center; flex: none; }
+.lista .info { flex: 1; min-width: 0; }
+.lista .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lista .s { color: var(--suave); font-size: .85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lista .x { background: none; border: 0; color: var(--suave); width: 40px; height: 40px; font-size: 1.1rem; }
+.vazio { color: var(--suave); text-align: center; padding: 24px 8px; }

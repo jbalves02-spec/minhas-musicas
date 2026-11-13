@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Minhas Músicas</title>
+<meta name="theme-color" content="#14110f">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icone-192.png">
+<link rel="apple-touch-icon" href="icone-192.png">
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<header class="topo">
+  <h1>Minhas Músicas</h1>
+  <span id="status" class="status">verificando…</span>
+</header>
+
+<nav class="abas" role="tablist">
+  <button role="tab" id="aba-online" aria-selected="true" data-painel="painel-online">Online (YouTube)</button>
+  <button role="tab" id="aba-local" aria-selected="false" data-painel="painel-local">Músicas guardadas</button>
+  <button role="tab" id="aba-config" aria-selected="false" data-painel="painel-config" aria-label="Configurações">⚙</button>
+</nav>
+
+<main>
+  <!-- ONLINE -->
+  <section id="painel-online" class="painel" role="tabpanel">
+    <div id="aviso-offline" class="aviso" hidden>Sem internet agora. Use a aba <b>Músicas guardadas</b>.</div>
+    <div id="aviso-chave" class="aviso" hidden>Falta a chave do YouTube. Abra a aba ⚙ para colar a sua.</div>
+    <form id="form-busca" class="busca">
+      <input id="campo-busca" type="search" placeholder="Música, cantor ou banda" autocomplete="off" enterkeyhint="search">
+      <button type="submit">Buscar</button>
+    </form>
+    <div id="player-yt-caixa" class="player-yt" hidden>
+      <div id="player-yt"></div>
+      <div class="controles">
+        <button id="yt-anterior" aria-label="Anterior">⏮</button>
+        <button id="yt-tocar" aria-label="Tocar ou pausar">⏯</button>
+        <button id="yt-proxima" aria-label="Próxima">⏭</button>
+        <button id="yt-fav" aria-label="Favoritar">☆</button>
+      </div>
+      <p id="yt-titulo" class="tocando"></p>
+    </div>
+    <div class="sub-abas">
+      <button id="ver-resultados" class="ativo">Resultados</button>
+      <button id="ver-favoritas">Favoritas</button>
+    </div>
+    <ul id="lista-yt" class="lista"></ul>
+  </section>
+
+  <!-- LOCAL -->
+  <section id="painel-local" class="painel" role="tabpanel" hidden>
+    <div class="acoes-local">
+      <label class="botao">
+        + Adicionar músicas
+        <input id="arquivos" type="file" accept="audio/*,.mp3,.m4a,.aac,.ogg,.wav,.flac,.opus" multiple hidden>
+      </label>
+      <label class="botao secundario" id="rotulo-pasta">
+        + Pasta inteira
+        <input id="pasta" type="file" webkitdirectory multiple hidden>
+      </label>
+    </div>
+    <p id="espaco" class="dica"></p>
+    <input id="filtro-local" type="search" placeholder="Procurar nas minhas músicas" class="filtro">
+    <div class="player-local">
+      <p id="local-titulo" class="tocando">Nenhuma música tocando</p>
+      <audio id="audio" controls preload="metadata"></audio>
+      <div class="controles">
+        <button id="local-anterior" aria-label="Anterior">⏮</button>
+        <button id="local-tocar" aria-label="Tocar ou pausar">⏯</button>
+        <button id="local-proxima" aria-label="Próxima">⏭</button>
+        <button id="local-aleatorio" aria-pressed="false" aria-label="Aleatório">🔀</button>
+      </div>
+    </div>
+    <ul id="lista-local" class="lista"></ul>
+  </section>
+
+  <!-- CONFIG -->
+  <section id="painel-config" class="painel" role="tabpanel" hidden>
+    <h2>Chave do YouTube</h2>
+    <p class="dica">Necessária só para a busca online. Fica guardada apenas neste aparelho.</p>
+    <form id="form-chave" class="busca">
+      <input id="campo-chave" type="password" placeholder="Cole aqui a chave (AIza…)" autocomplete="off">
+      <button type="submit">Salvar</button>
+    </form>
+    <p id="chave-ok" class="dica"></p>
+    <h2>Instalar</h2>
+    <p class="dica">No celular (Chrome): menu ⋮ → <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>. No computador: ícone de instalar na barra de endereço.</p>
+    <button id="botao-instalar" hidden>Instalar agora</button>
+    <h2>Músicas guardadas</h2>
+    <button id="apagar-tudo" class="perigo">Apagar todas as músicas guardadas neste aparelho</button>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
